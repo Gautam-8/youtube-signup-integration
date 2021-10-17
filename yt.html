@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+      #videos{
+          display: grid;
+          grid-template-columns: repeat(4, 20%);
+          gap:55px;
+          margin-top: 20px;
+          margin-left: 150px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          font-weight: normal;
+      }
+      #query{
+          width:530px;
+          height:35px ;
+          opacity: .7;
+          font-weight: normal;
+          font-size: medium;
+          margin-left: 300px;
+      }
+     
+      button{
+          width:67px;
+          height: 40px;
+          opacity: .7;
+      }
+      button img{
+          width:20px;
+          height:20px;
+          
+      }
+      #btnsrch{
+          display: flex;
+          margin-top: 10px;
+         
+      }
+      button,img:hover{
+          cursor: pointer;
+          
+      }
+      #yticon{
+          width:100px;
+          height:25px;
+          margin-left:100px
+      }
+      #login-form{
+          position:fixed;
+          width:200px;
+          height:fit-content;
+          display: none;
+          z-index: 500;
+          background-color:white;
+          
+         }
+         #wrong{
+             height:20px ;
+             width: 20px;
+             margin-left:100px;
+             
+         }
+         #lw{
+             font-size:25px;
+         }
+         #ld{
+             font-size: 30px;
+             cursor: pointer;
+             margin-left:20px;
+         }
+         #btnsignup{
+             width:80px;
+             height:25px;
+             opacity: 1;
+             margin-top:20px;
+             display:none;
+          
+           
+             
+         }
+         #signup-form{
+            position:fixed;
+          width:200px;
+          height:fit-content;
+          display: none;
+          z-index: 500;
+          background-color:white;
+    }
+    #signup-form input,#login-form input{
+            margin:5px;
+    }
+   #burger{
+       width:40px;
+       height:40px;
+   }
+   body{
+       font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+   }
+
+  </style>
+  <body>
+    
+    <div id="btnsrch">
+       <img id="burger" src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_YJP_KMCtE7ikxFGj881Y8-gW4alVd98JTA&usqp=CAU"/>
+
+      <img id="yticon" src = "https://www.pngkey.com/png/detail/314-3149308_youtube-podcast-icon-link-youtube-new-logo-png.png"/>
+
+    <input type="text" id="query" placeholder="Search" />
+
+    <button onclick="searchVideos()"><img src = "https://img.icons8.com/ios/2x/search.png"/></button> 
+
+
+
+
+
+    
+    <div id="login">
+        <div onclick="showloginform()" id="ld">Login</div>  
+
+        <form onsubmit="Login(event)" id="login-form"> 
+
+            <span id="lw">Login
+            </span>
+          
+         <img id="wrong" onclick="exit()" src="https://thumbs.dreamstime.com/b/wrong-incorrect-sign-correct-right-answer-correct-incorrect-sign-right-wrong-icon-right-correct-botton-wrong-170566102.jpg"/>
+         <input type="text" id="user" placeholder="username" />
+            <input type="password" id="pass" placeholder="password" />
+            <input type="submit" /><br/>
+
+            <button onclick="showsignupform()" id="btnsignup">signup</button>
+           
+          </form>
+
+           </div>
+        
+
+
+
+
+
+        
+        <div id="signup">
+            <form onsubmit="Signup(event)" id="signup-form">
+                <span id="lw">Signup</span>
+                <img id="wrong" onclick="exit_s()" src="https://thumbs.dreamstime.com/b/wrong-incorrect-sign-correct-right-answer-correct-incorrect-sign-right-wrong-icon-right-correct-botton-wrong-170566102.jpg"/>
+                <input type="text" id="name" placeholder="name" />
+                <input type="email" id="email" placeholder="email" />
+                <input type="password" id="password" placeholder="password" />
+                <input type="text" id="username" placeholder="username" />
+                <input type="number" id="mobile" placeholder="mobile" />
+                <input type="text" id="description" placeholder="description" />
+                <input type="submit" />
+              </form>
+         
+            </div>
+</div>
+
+
+
+
+
+
+
+
+    <div id="videos"></div>
+
+  </body>
+</html>
+
+<script>
+//AIzaSyBcXoFUj5G0qYBNmLgaCSKDVp3SLlFJx-4
+
+//https://youtube.googleapis.com/youtube/v3/search?q=csk&type=video&key=[YOUR_API_KEY]
+
+
+async function searchVideos(){
+    //q = csk
+    //type = videos
+    //apikey = 
+
+    let query = document.getElementById('query').value;
+
+let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${query}&type=video&key=AIzaSyBcXoFUj5G0qYBNmLgaCSKDVp3SLlFJx-4&maxResults=20&part=snippet`);
+let data = await res.json();
+console.log(data);
+
+appendVideos(data.items)
+}
+
+
+let videos = document.getElementById('videos');
+
+function appendVideos(videodata) {
+
+    videos.innerHTML = null;
+
+videodata.forEach( ( v) =>{
+  
+
+//embed youtube video on our web app
+let videoid = v.id.videoId;
+
+let div1 = document.createElement('div');
+
+let div = document.createElement('div');
+div.innerHTML = `<iframe width="300" height="190" src="https://www.youtube.com/embed/${videoid}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+
+let p = document.createElement('p');
+p.innerText = v.snippet.channelTitle;
+
+div1.append(div,p);
+videos.append(div1);
+
+})
+
+
+}
+
+
+
+//trending page
+async function trendingVideos(){
+    
+let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?regionCode=IN&type=video&key=AIzaSyBcXoFUj5G0qYBNmLgaCSKDVp3SLlFJx-4&maxResults=20&part=snippet`);
+let data = await res.json();
+console.log(data);
+
+appendVideos(data.items)
+}
+
+trendingVideos();
+
+
+
+
+
+//signup and login starts
+
+function showloginform(){
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('ld').style.display = 'none';
+    document.getElementById('btnsignup').style.display = 'block';
+
+}
+
+function exit(){
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('ld').style.display = 'block';
+    document.getElementById('btnsignup').style.display = 'none';
+}
+
+function showsignupform(){
+    document.getElementById('signup-form').style.display = 'block';
+    document.getElementById('ld').style.display = 'none';
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('btnsignup').style.display = 'none';
+}
+function exit_s(){
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('ld').style.display = 'block';
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('btnsignup').style.display = 'none';
+
+}
+</script>
+
+
+
+
+
+
+<script>
+
+ function Signup(e){
+
+e.preventDefault()
+
+let form = document.getElementById("signup-form");
+
+let user_data = {
+    name: form.name.value,
+    email: form.email.value,
+    password: form.password.value,
+    username: form.username.value,
+    mobile: form.mobile.value,
+    description: form.description.value
+
+};
+
+console.log(user_data);
+user_data = JSON.stringify(user_data)
+
+
+fetch("https://masai-api-mocker.herokuapp.com/auth/register",{
+
+    method:'POST',
+    
+    body:user_data,
+
+    headers:{
+    'Content-Type':'application/json',
+    },
+})
+
+.then((res)=>{
+    return res.json();
+
+})
+.then((res)=>{
+    console.log('res:',res);
+    let msg = res.message;
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('signup-form').style.display = 'none';
+    document.getElementById('ld').style.display = 'block';
+  
+    document.getElementById('btnsignup').style.display = 'none';
+
+})
+.catch((err) =>{
+    console.log(err);
+})
+
+}
+
+
+
+//login
+function Login(e){
+e.preventDefault();
+
+let form = document.getElementById("login-form");
+
+let user_data = {
+    username:form.user.value,
+    password:form.pass.value,
+};
+
+let data_to_send = JSON.stringify(user_data);
+//console.log(data_to_send);
+
+fetch("https://masai-api-mocker.herokuapp.com/auth/login",{
+
+method:'POST',
+
+body:data_to_send,
+
+headers:{
+    'Content-Type':'application/json',
+},
+
+})
+
+.then((res)=>{
+    return res.json();
+})
+.then((res)=>{
+    console.log(res);
+    fetchmyData(user_data.username,res.token);
+})
+
+
+
+.catch((err)=>{
+    console.log(err);
+})
+
+
+}
+
+
+function fetchmyData(username,token) {
+fetch(`https://masai-api-mocker.herokuapp.com/user/${username}`,{
+        
+    headers: {
+        'Content-Type':'application/json',
+
+        Authorization: `Bearer ${token}`,
+    },  
+})
+.then((res)=>{
+    return res.json();
+})
+.then((res)=>{
+    let named = res.name;
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('ld').style.display = 'block';
+    document.getElementById('ld').innerHTML = named ;
+    document.getElementById('btnsignup').style.display = 'none';
+
+    console.log('res:',res);
+})
+.catch((err)=>{
+    console.log(err);
+})
+
+}
+</script>
